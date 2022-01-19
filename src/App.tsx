@@ -1,10 +1,13 @@
 import React from 'react';
+import { GlobalStyle } from './styles/globalStyle';
+
 
 function App() {
   return (
-    <div >
-      zxc
-    </div>
+    <>
+      <GlobalStyle/>
+      <div>test word</div>
+    </>
   );
 }
 
