@@ -110,6 +110,7 @@ export const Form = ():JSX.Element => {
         if (localStorage.getItem("saved") === "true" && watchLogin === localStorage.getItem("login")) { 
             setValue('password', localStorage.getItem('password'))
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watchLogin])
 
     const onSubmit = (data: any) => {
