@@ -1,13 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { useContext, useState, useEffect } from 'react';
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import { AuthContext } from "../../context";
+
+import styled from "styled-components";
+
+import { useForm } from "react-hook-form";
 import { mockData } from "../../mockData/mockData";
+
 import { ErrorEl } from "./ErrorEl/ErrorEl";
 import { SubmitBtn } from "./SubmitBtn/SubmitBtn";
-import CheckBoxOffIcon from './check_off.svg';
-import CheckBoxOnIcon from './check_on.svg';
+
+import IconCheckBoxOff from './check_off.svg';
+import IconCheckBoxOn from './check_on.svg';
+import IconCheckBoxDis from './check_dis.svg';
+
 import { useHistory } from 'react-router-dom';
 import { Routes } from '../../route';
 
@@ -23,14 +29,18 @@ const CheckInput = styled.input.attrs({
 	type: 'checkbox',
 })`
     position: absolute;
-    /* appearance: none; */
+    appearance: none;
 	width: .1px;
 	height: .1px;
 	overflow: hidden;
 
 	&:checked + span {
-		background-image: url(${CheckBoxOnIcon});
+		background-image: url(${IconCheckBoxOn});
 	}
+
+    &:disabled + span {
+        background-image: url(${IconCheckBoxDis})
+    }
 `;
 
 const CheckboxEl = styled.span`
@@ -39,7 +49,7 @@ const CheckboxEl = styled.span`
 	margin-top: -2px;
 	width: 20px;
 	height: 20px;
-	background-image: url(${CheckBoxOffIcon});
+	background-image: url(${IconCheckBoxOff});
     transition: all .5s ease;
 `;
 
@@ -105,6 +115,7 @@ export const Form = ():JSX.Element => {
             getValues, formState: { errors, isSubmitting }} = useForm({ mode: "onBlur" });
 
     const watchLogin = watch("login")
+    const watchPassword = watch("password")
 
     useEffect(() => { 
         if (localStorage.getItem("saved") === "true" && watchLogin === localStorage.getItem("login")) { 
@@ -140,6 +151,7 @@ export const Form = ():JSX.Element => {
     };
 
 
+
     return (
         <StyledForm onSubmit={handleSubmit(onSubmit)}>
             {errElVisible && <ErrorEl errElMsg={errElMsg} errElEmail={errElEmail} />}
@@ -161,14 +173,15 @@ export const Form = ():JSX.Element => {
                 <Input
                     type='password'
                     err={errors.hasOwnProperty("password") ?  true : false}
-                    {...register("password", { required: true, minLength: 4 })}
+                    {...register("password", { required: true, minLength: 2 })}
                 />
                 {errors.password && errors.password.type === 'required' && <ErrorMessage> Обязательное поле</ErrorMessage>}
-                {errors.password && errors.password.type === 'minLength' && <ErrorMessage> Пароль должен содержать минимум 4 символа</ErrorMessage>}
+                {errors.password && errors.password.type === 'minLength' && <ErrorMessage> Пароль должен содержать минимум 2 символа</ErrorMessage>}
             </Label>
             
             <CheckLabel>
                 <CheckInput checked={isChecked}
+                    disabled={!watchPassword && !errors.password}
                     {...register("addPassword", {
                     onChange: changeMarked
                 })}/>
