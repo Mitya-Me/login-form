@@ -10,48 +10,10 @@ import { mockData } from "../../mockData/mockData";
 import { ErrorEl } from "./ErrorEl/ErrorEl";
 import { SubmitBtn } from "./SubmitBtn/SubmitBtn";
 
-import IconCheckBoxOff from './check_off.svg';
-import IconCheckBoxOn from './check_on.svg';
-import IconCheckBoxDis from './check_dis.svg';
-
 import { useHistory } from 'react-router-dom';
 import { Routes } from '../../route';
-
-const CheckLabel = styled.label`
-	padding-left: 30px;
-    padding-top: 5px;
-	font-size: var(--fz-m);
-	line-height: var(--lh-m);
-	cursor: pointer;
-`
-
-const CheckInput = styled.input.attrs({
-	type: 'checkbox',
-})`
-    position: absolute;
-    appearance: none;
-	width: .1px;
-	height: .1px;
-	overflow: hidden;
-
-	&:checked + span {
-		background-image: url(${IconCheckBoxOn});
-	}
-
-    &:disabled + span {
-        background-image: url(${IconCheckBoxDis})
-    }
-`;
-
-const CheckboxEl = styled.span`
-	position: absolute;
-	margin-left: -30px;
-	margin-top: -2px;
-	width: 20px;
-	height: 20px;
-	background-image: url(${IconCheckBoxOff});
-    transition: all .5s ease;
-`;
+import { Inputt } from './Input/Input';
+import { Checkbox } from './Checkbox/Checkbox';
 
 
 const StyledForm = styled.form`
@@ -83,6 +45,14 @@ const ErrorMessage = styled.div`
     margin-top: 8px;
     color: var(--clr-error);
 `;
+ 
+export interface IFormValues { 
+    login: string;
+    password: string;
+    firstName: string;
+    savePass: string;
+}
+
 
 export const Form = ():JSX.Element => {
     const { setAuth }= useContext(AuthContext);
@@ -112,10 +82,12 @@ export const Form = ():JSX.Element => {
     } 
 
     const { register, handleSubmit, setValue, reset, watch,
-            getValues, formState: { errors, isSubmitting }} = useForm({ mode: "onBlur" });
+            getValues, formState: { errors, isSubmitting }} = useForm<IFormValues>({ mode: "onBlur" });
 
     const watchLogin = watch("login")
     const watchPassword = watch("password")
+
+    console.log(localStorage.getItem('password'))
 
     useEffect(() => { 
         if (localStorage.getItem("saved") === "true" && watchLogin === localStorage.getItem("login")) { 
@@ -178,17 +150,15 @@ export const Form = ():JSX.Element => {
                 {errors.password && errors.password.type === 'required' && <ErrorMessage> Обязательное поле</ErrorMessage>}
                 {errors.password && errors.password.type === 'minLength' && <ErrorMessage> Пароль должен содержать минимум 2 символа</ErrorMessage>}
             </Label>
-            
-            <CheckLabel>
-                <CheckInput checked={isChecked}
-                    disabled={!watchPassword && !errors.password}
-                    {...register("addPassword", {
-                    onChange: changeMarked
-                })}/>
-			    <CheckboxEl></CheckboxEl>
-			    Запомнить пароль
-            </CheckLabel>
 
+            <Checkbox
+                label="savePass"
+                dis={!watchPassword && !errors.password}
+                checkboxLabel="Запомнить пароль"
+                onChange={changeMarked}
+                isChecked={isChecked}
+                register={register}
+            />
             <SubmitBtn disValue={isSubmitting} />
         </StyledForm>
     );
