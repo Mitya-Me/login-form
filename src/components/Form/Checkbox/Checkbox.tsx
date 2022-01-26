@@ -42,11 +42,11 @@ const CheckboxEl = styled.span`
 `;
 
 interface ICheckbox { 
-	isChecked: boolean;
-	dis: boolean;
-	label: Path<IFormValues>;
-	checkboxLabel: string;
 	register: UseFormRegister<IFormValues>;
+	label: Path<IFormValues>;
+	dis: boolean;
+	isChecked: boolean;
+	checkboxLabel: string;
 	onChange: () => void;
 }
 
@@ -58,5 +58,5 @@ export const Checkbox= ({isChecked, dis, label, register, checkboxLabel, onChang
 		})}/>
 		<CheckboxEl></CheckboxEl>
 		{checkboxLabel}
-	/</CheckLabel>
+	</CheckLabel>
 )
