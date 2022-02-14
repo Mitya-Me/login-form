@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import IconCheckBoxOff from "../check_off.svg";
-import IconCheckBoxOn from "../check_on.svg";
-import IconCheckBoxDis from "../check_dis.svg";
+import IconCheckBoxOff from "./img/check_off.svg";
+import IconCheckBoxOn from "./img/check_on.svg";
+import IconCheckBoxDis from "./img/check_dis.svg";
 import { Path, UseFormRegister } from "react-hook-form";
 import { IFormValues } from "../Form";
 
